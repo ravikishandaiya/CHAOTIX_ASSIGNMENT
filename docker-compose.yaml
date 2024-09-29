@@ -1,0 +1,44 @@
+services:
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    command: sh entrypoint.sh
+    volumes:
+      - ./Backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env-backend
+    depends_on:
+      - celery
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    command: celery -A text_to_image worker --loglevel=info
+    volumes:
+      - ./Backend:/app
+    env_file:
+      - .env-backend
+    depends_on:
+      - redis
+
+  redis:
+    image: redis
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    volumes:
+      - ./Frontend:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=developmen
+    env_file:
+      - .env-frontend
+    depends_on:
+      - django

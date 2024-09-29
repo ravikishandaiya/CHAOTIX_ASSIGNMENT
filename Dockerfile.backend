@@ -1,0 +1,23 @@
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+COPY Backend/requirements.txt requirements.txt
+# COPY Backend/. .
+
+RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# RUN python manage.py makemigrations
+# RUN python manage.py migrate
+
+# EXPOSE 8000
+
+# Run the Django development servers
+# CMD ["gunicorn", "text_to_image.wsgi:application", "--bind", "0.0.0.0:8000"]
+
+# CMD ["python", "text_to_image/manage.py", "runserver", "0.0.0.0:8000"]
+# ENTRYPOINT ["sh", "entrypoint.sh"]
